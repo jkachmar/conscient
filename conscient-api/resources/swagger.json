@@ -1,0 +1,166 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.1.0",
+        "title": "Conscient API",
+        "license": {
+            "url": "http://mit.com",
+            "name": "MIT"
+        },
+        "description": "This is an API that demonstrates how one might take a 'code-first' approach to deriving API specifications with Haskell and Servant."
+    },
+    "definitions": {
+        "User": {
+            "example": {
+                "user": {
+                    "username": "aroberts",
+                    "updated_at": "2018-01-01T00:00:00Z",
+                    "created_at": "2018-01-01T00:00:00Z",
+                    "email_address": "aroberts@example.com"
+                }
+            },
+            "required": [
+                "username",
+                "password",
+                "email_address",
+                "created_at",
+                "updated_at"
+            ],
+            "type": "object",
+            "description": "A Conscient user",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "$ref": "#/definitions/UTCTime"
+                },
+                "created_at": {
+                    "$ref": "#/definitions/UTCTime"
+                },
+                "email_address": {
+                    "type": "string"
+                }
+            }
+        },
+        "UTCTime": {
+            "example": "2016-07-22T00:00:00Z",
+            "format": "yyyy-mm-ddThh:MM:ssZ",
+            "type": "string"
+        }
+    },
+    "paths": {
+        "/v1/users/{name}": {
+            "get": {
+                "summary": "Get a specific user by name.",
+                "responses": {
+                    "404": {
+                        "description": "`name` not found"
+                    },
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        },
+                        "description": ""
+                    }
+                },
+                "produces": [
+                    "application/json;charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "required": true,
+                        "in": "path",
+                        "name": "name",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/v1/users": {
+            "post": {
+                "summary": "Create a user.",
+                "consumes": [
+                    "application/json;charset=utf-8"
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid `body`"
+                    },
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        },
+                        "description": ""
+                    }
+                },
+                "produces": [
+                    "application/json;charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        },
+                        "in": "body",
+                        "name": "body"
+                    }
+                ],
+                "description": "Create a new user from the `User` record supplied by request body."
+            },
+            "get": {
+                "summary": "Get a list of all users.",
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            },
+                            "type": "array"
+                        },
+                        "description": ""
+                    }
+                },
+                "produces": [
+                    "application/json;charset=utf-8"
+                ],
+                "description": "Get a list of all users currently registered with this service."
+            },
+            "put": {
+                "summary": "Update a user.",
+                "consumes": [
+                    "application/json;charset=utf-8"
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid `body`"
+                    },
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        },
+                        "description": ""
+                    }
+                },
+                "produces": [
+                    "application/json;charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        },
+                        "in": "body",
+                        "name": "body"
+                    }
+                ],
+                "description": "Update an existing user by completely replacing their `User` record with a new one supplied by the request body."
+            }
+        }
+    }
+}

@@ -7,8 +7,8 @@ import           Data.Swagger        (Swagger, URL (..), description, info,
                                       license, title, url, version)
 import           GHC.Generics        ()
 import           Lens.Micro          ((&), (.~), (?~))
-import           Servant.API         ((:>), Capture, Get, JSON, Post, Put,
-                                      ReqBody)
+import           Servant.API         ((:>), Capture, Description, Get, JSON, Post, Put,
+                                      ReqBody, Summary)
 import           Servant.API.Generic ((:-), ToServantApi, genericApi)
 import           Servant.Swagger     (toSwagger)
 
@@ -34,18 +34,33 @@ import           Conscient.Models    (User)
 data UserRoutes route
     = UserRoutes
     -- "/users", HTTP GET, JSON response body containing a list of Users
-    { _getUsers   :: route :- "users" :> Get '[JSON] [User]
+    { _getUsers :: route
+        :- Summary "Get a list of all users."
+        :> Description "Get a list of all users currently registered with this \
+                       \service."
+        :> "users" :> Get '[JSON] [User]
 
     -- "/users/:name", HTTP GET, JSON response body containing a single User
-    , _getUser    :: route :- "users" :> Capture "name" Text :> Get '[JSON] User
+    , _getUser :: route
+        :- Summary "Get a specific user by name."
+        :> "users" :> Capture "name" Text :> Get '[JSON] User
 
     -- "/users", HTTP POST, JSON request body containing a single user, JSON
     -- response body containing a single user
-    , _createUser :: route :- "users" :> ReqBody '[JSON] User :> Post '[JSON] User
+    , _createUser :: route
+        :- Summary "Create a user."
+        :> Description "Create a new user from the `User` record supplied by \
+                       \request body."
+        :> "users" :> ReqBody '[JSON] User :> Post '[JSON] User
 
     -- "/users", HTTP PUT, JSON request body containing a single user, JSON
     -- response body containing a single user
-    , _updateUser :: route :- "users" :> ReqBody '[JSON] User :> Put '[JSON] User
+    , _updateUser :: route
+        :- Summary "Update a user."
+        :> Description "Update an existing user by completely replacing their \
+                       \`User` record with a new one supplied by the request \
+                       \body."
+        :> "users" :> ReqBody '[JSON] User :> Put '[JSON] User
     } deriving Generic
 
 -- | The API contract for all routes associated with this specification.

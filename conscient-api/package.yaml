@@ -10,14 +10,7 @@ extra-source-files:
   - README.md
   - CHANGELOG.md
 
-# Metadata used when publishing your package
-# synopsis:            Short description of your package
-# category:            Web
-
-# To avoid duplicated efforts in documentation and dealing with the
-# complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/jkachmar/jkachmar/conscient-api#readme>
+# description:
 
 default-extensions:
   - ConstraintKinds
@@ -74,15 +67,32 @@ library:
   source-dirs: library
 
 executables:
-  conscient-api-exe:
+  serve-api-docs:
     main:                Main.hs
-    source-dirs:         executables
+    source-dirs:         executables/serve-api-docs
     ghc-options:
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
     dependencies:
       - conscient-api
+      - servant-server
+      - servant-swagger-ui-redoc
+      - wai-extra
+      - warp
+
+  generate-api-spec:
+    main:                Main.hs
+    source-dirs:         executables/generate-api-specs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - aeson-pretty
+      - bytestring
+      - conscient-api
+      - directory
 
 tests:
   conscient-api-test:
